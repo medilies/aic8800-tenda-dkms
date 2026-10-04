@@ -21,7 +21,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends debhelper dh-dkms lintian
+          sudo apt-get install -y --no-install-recommends build-essential debhelper dh-dkms lintian
 
       - name: Build package
         run: |
@@ -32,24 +32,25 @@ jobs:
       - name: Lint package
         run: lintian --fail-on error dist/*.deb
 
-      - name: Install package, building the module for the runner kernel
-        run: |
-          sudo apt-get install -y "linux-headers-$(uname -r)" ./dist/*.deb
-          dkms status -k "$(uname -r)" aic8800-tenda | grep installed
+      # The runner's own (Azure) kernel has no headers installed, so DKMS only registers the module here.
+      - name: Install package
+        run: sudo apt-get install -y --no-install-recommends ./dist/*.deb
 
-      - name: Build the module for the latest Ubuntu HWE kernel
+      # Desktop kernels users run: the 24.04 GA kernel and the latest HWE kernel. Installing their
+      # headers triggers the DKMS build, as a kernel update does; build explicitly if it did not.
+      - name: Build the module for Ubuntu 24.04 kernels
         run: |
-          # Installing headers may already trigger the build through the DKMS header hook.
-          sudo apt-get install -y linux-headers-generic-hwe-24.04
-          k=$(ls /usr/src | sed -n 's/^linux-headers-\(.*-generic\)$/\1/p' | sort -V | tail -1)
-          if ! dkms status -k "$k" aic8800-tenda | grep -qE 'built|installed'; then
-            sudo dkms build "aic8800-tenda/$(dpkg-parsechangelog -S Version)" -k "$k"
-          fi
-          dkms status -k "$k" aic8800-tenda | grep -E 'built|installed'
+          sudo apt-get install -y --no-install-recommends linux-headers-generic linux-headers-generic-hwe-24.04
+          v=$(dpkg-parsechangelog -S Version)
+          for k in $(ls /usr/src | sed -n 's/^linux-headers-\(.*-generic\)$/\1/p'); do
+            st=$(dkms status -k "$k" aic8800-tenda)
+            grep -qE 'built|installed' <<<"$st" || sudo dkms build "aic8800-tenda/$v" -k "$k"
+            dkms status -k "$k" aic8800-tenda | grep -E 'built|installed'
+          done
 
       - name: Show DKMS build log
         if: failure()
-        run: cat /var/lib/dkms/aic8800-tenda/*/build/make.log || true
+        run: sudo cat /var/lib/dkms/aic8800-tenda/*/build/make.log || true
 
       - uses: actions/upload-artifact@v7
         with:
