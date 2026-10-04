@@ -1,0 +1,2 @@
+# Configuration files read by the driver, not documentation.
+aic8800-tenda-dkms: package-contains-documentation-outside-usr-share-doc [usr/lib/firmware/aic8800*/*.txt]

@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+include /usr/share/dpkg/pkg-info.mk
+
+DKMS_NAME := $(shell sed -n 's/^PACKAGE_NAME="\(.*\)"$$/\1/p' src/dkms.conf)
+DKMS_VERSION := $(shell sed -n 's/^PACKAGE_VERSION="\(.*\)"$$/\1/p' src/dkms.conf)
+
+ifneq ($(DKMS_VERSION),$(DEB_VERSION_UPSTREAM))
+$(error PACKAGE_VERSION in src/dkms.conf ($(DKMS_VERSION)) differs from debian/changelog ($(DEB_VERSION_UPSTREAM)))
+endif
+
+%:
+	dh $@
+
+# dh_dkms installs dkms.conf itself.
+override_dh_install:
+	dh_install -Xdkms.conf src/* usr/src/$(DKMS_NAME)-$(DKMS_VERSION)/
+	dh_install firmware/* usr/lib/firmware/
+	dh_install udev/* usr/lib/udev/rules.d/

@@ -1,0 +1,24 @@
+Source: aic8800-tenda-dkms
+Section: kernel
+Priority: optional
+Maintainer: Mohamed Ilies Boudouma <medilies@gmail.com>
+Build-Depends: debhelper-compat (= 13), dh-sequence-dkms
+Standards-Version: 4.6.2
+Homepage: https://github.com/medilies/aic8800-tenda-dkms
+Vcs-Browser: https://github.com/medilies/aic8800-tenda-dkms
+Vcs-Git: https://github.com/medilies/aic8800-tenda-dkms.git
+Rules-Requires-Root: no
+
+Package: aic8800-tenda-dkms
+Architecture: all
+Depends: eject, ${misc:Depends}
+Conflicts: ax300-wifi-adapter-linux-driver, ax900-wifi-adapter-linux-driver, w311miv6-pkg
+Replaces: ax300-wifi-adapter-linux-driver, ax900-wifi-adapter-linux-driver, w311miv6-pkg
+Description: AIC8800 Wi-Fi 6 USB driver for Tenda adapters (DKMS)
+ Driver for USB Wi-Fi 6 adapters built on the AICSemi AIC8800 chip family,
+ such as the Tenda U2 and W311MI V6 (AX300) and the U11 and U11 Pro (AX900).
+ .
+ This is the driver Tenda ships for Linux, patched for current kernels and
+ built through DKMS so it is rebuilt on every kernel update. The package
+ also ships the firmware and a udev rule that switches the adapter from its
+ virtual driver disk to Wi-Fi mode.

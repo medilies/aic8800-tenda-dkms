@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+#DEBHELPER#
+
+if [ "$1" = configure ]; then
+	# Adapter plugged in before installation: eject its driver disk so it
+	# switches to WiFi mode, and load the driver in case it already did.
+	udevadm control --reload-rules >/dev/null 2>&1 || true
+	udevadm trigger --action=add --subsystem-match=block --property-match=ID_VENDOR_ID=a69c >/dev/null 2>&1 || true
+	if grep -qsx -e 2604 -e a69c -e 368b /sys/bus/usb/devices/*/idVendor; then
+		modprobe -q aic8800_fdrv || true
+	fi
+fi
+
+exit 0

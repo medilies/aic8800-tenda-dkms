@@ -1,0 +1,36 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: aic8800
+Upstream-Contact: AICSemi <https://www.aicsemi.com>
+Source: Tenda Linux driver package ax300-wifi-adapter-linux-driver.deb, version 1.0.1.2
+
+Files: *
+Copyright: 2011-2019 RivieraWaves
+           2018-2024 AICSemi
+License: GPL-2
+
+Files: src/aic8800_fdrv/aic_br_ext.*
+Copyright: 2007-2017 Realtek Corporation
+License: GPL-2
+
+Files: firmware/*
+Copyright: AICSemi
+License: AICSemi-firmware
+ Binary firmware, redistributed unmodified as shipped in Tenda's Linux driver
+ package. No license text accompanies it.
+
+Files: debian/* udev/* .github/* README.md src/dkms.conf src/aic8800_fdrv/aicwf_kcompat.h
+Copyright: 2026 Mohamed Ilies Boudouma <medilies@gmail.com>
+License: GPL-2
+
+License: GPL-2
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of version 2 of the GNU General Public License as published
+ by the Free Software Foundation.
+ .
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ more details.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ version 2 can be found in "/usr/share/common-licenses/GPL-2".

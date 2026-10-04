@@ -1,0 +1,7 @@
+aic8800-tenda-dkms (1.0.1.2+kcompat1) unstable; urgency=medium
+
+  * Tenda AIC8800 Linux driver 1.0.1.2, packaged with DKMS.
+  * Fix the build on kernels 6.15 to 7.0.
+  * Limit the mode-switch udev rule to the add event of the whole disk.
+
+ -- Mohamed Ilies Boudouma <medilies@gmail.com>  Sun, 04 Oct 2026 22:53:32 +0100
